@@ -1,8 +1,14 @@
-CFLAGS = -Wall -g
-
+CFLAGS = -Wall -g 
+f = exe
 all:
-	gcc caligula.c -o caligula
+	gcc -lncurses caligula.c -o $f
+	gcc -lncurses test.c -o test
+
+run:
+	./$f
+
 
 clean:
-	rm -f thing
+	rm -f $f
+	rm -f test
 
