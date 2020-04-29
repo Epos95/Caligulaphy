@@ -28,21 +28,21 @@ int count_words(char words[1024]) {
 			amount++;
 		}
 	}
-
 	return amount;
 }
 
 
 int main()
 {
-	char str[1024] = "ah hello there it is so nice to meet you";
-	int words = count_words(str);
+	char str[1024] = "ah hello there it is so nice to meet you. it is actually a true pleasure dear god i lover her so ";
+	int word_count = count_words(str);
+	printf("string has %d words\n", word_count);
 
 	initscr();
 	noecho();
 
 	if (has_colors() == FALSE){
-		printf(ERROR "[Caligulaphy]\t\t" RESET);
+		printf(ERROR "[Caligulaphy]\t" RESET);
 		printf("Color might not be supported.\n");
 		exit(1);
 	}
@@ -60,7 +60,7 @@ int main()
 
 
 
-	mvprintw(10,10,str);
+	mvprintw(10,0,str);
 
 	char input;
 	char current;
@@ -71,14 +71,16 @@ int main()
 	clock_t start, end;
 
 
-	start = clock();
+
+
+	start = time(NULL);
 
 	for (int i=0; i < strlen(str); i++){
-		move(10,10+i);
+		move(10,0+i);
 
 		current = str[i];
 		input = getch();
-		
+
 		if (current == ' ' || i == strlen(str)) {
 			// ordet är slut
 			if (errors > 0){
@@ -95,22 +97,34 @@ int main()
 
 		if(input == current){
 			attron(COLOR_PAIR(SUCCESS_PAIR));
-			mvaddch(10,10+i, current);
+			mvaddch(10,0+i, current);
 			attroff(COLOR_PAIR(SUCCESS_PAIR));
 		} else {
 			attron(COLOR_PAIR(ERROR_PAIR));
-			mvaddch(10,10+i, current);
+			mvaddch(10,0+i, current);
 			attroff(COLOR_PAIR(ERROR_PAIR));
 			errors++;
 		}
 		refresh();
 	}
-	end = clock();
 
-	mvprintw(13,10, "You did well!\tpress any key to exit.\n%d errors %d", total_errors);
-	getch();
+	end = time(NULL);
+	float wpm = ((word_count-total_errors)/(float)(end-start))*60;
+
+
+	mvprintw(13,0, "You did well!\npress any key to exit.");
 	getch();
 	endwin();
+
+	printf("Time taken: %ld\n", (int)end-start);
+	printf("Words per minute: %f\n", wpm);
+	printf("Words per second: %f\n", wpm/60);
+	printf("Total words: %d\n", word_count);
+	printf("Words failed: %d\n", errors);
+
+
+
+
 
 	return 0;
 }
